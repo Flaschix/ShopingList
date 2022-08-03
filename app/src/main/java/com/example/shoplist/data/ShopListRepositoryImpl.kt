@@ -16,7 +16,6 @@ object ShopListRepositoryImpl: ShopListRepository {
 
     override fun deleteShopItem(item: ShopItem) {
         list.remove(item)
-        autoIncrementId--
     }
 
     override fun editShopItem(item: ShopItem) {
