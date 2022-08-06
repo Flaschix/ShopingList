@@ -5,11 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import com.example.shoplist.domain.ShopItem
 import com.example.shoplist.domain.ShopListRepository
 import java.lang.RuntimeException
+import java.util.*
 
 object ShopListRepositoryImpl: ShopListRepository {
     private val shopListLiveData = MutableLiveData<List<ShopItem>>()
 
-    private val list: MutableList<ShopItem> = ArrayList()
+    private val list = sortedSetOf<ShopItem>({item1, item2 -> item1.id.compareTo(item2.id)})
+
     private var autoIncrementId = 0
 
     override fun addShopItem(item: ShopItem) {
