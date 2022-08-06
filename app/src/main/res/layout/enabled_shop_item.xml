@@ -18,7 +18,7 @@
         android:padding="12sp">
 
         <TextView
-            android:id="@+id/tvEnItem"
+            android:id="@+id/tvName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -26,7 +26,7 @@
             android:textColor="#000000" />
 
         <TextView
-            android:id="@+id/tvEnCount"
+            android:id="@+id/tvCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
