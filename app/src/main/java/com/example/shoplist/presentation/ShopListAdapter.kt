@@ -1,29 +1,15 @@
 package com.example.shoplist.presentation
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.example.shoplist.R
 import com.example.shoplist.domain.ShopItem
 
-class ShopListAdapter: RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>() {
-
-    class ShopItemViewHolder(val view: View): RecyclerView.ViewHolder(view){
-        val tvName = view.findViewById<TextView>(R.id.tvName)
-        val tvCount = view.findViewById<TextView>(R.id.tvCount)
-    }
-
-    var shopList = listOf<ShopItem>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+class ShopListAdapter: ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCallback()) {
 
     var onShopItemLongClickListener: ((ShopItem) -> Unit)? = null
     var onShopItemClickListener: ((ShopItem) -> Unit)? = null
-    var onShopItemSwipListener: ((ShopItem) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopItemViewHolder {
         val layout = when(viewType){
@@ -36,7 +22,7 @@ class ShopListAdapter: RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>(
     }
 
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
-        val shopItem = shopList[position]
+        val shopItem = getItem(position)
 
         holder.tvName.text = shopItem.name
         holder.tvCount.text = shopItem.count.toString()
@@ -50,21 +36,15 @@ class ShopListAdapter: RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>(
             onShopItemClickListener?.invoke(shopItem)
             true
         }
-
-
     }
 
     override fun getItemViewType(position: Int): Int {
-        var shopItem = shopList[position]
+        var shopItem = getItem(position)
         return if(shopItem.enabled) {
             VIEW_TYPE_ENABLED
         } else{
             VIEW_TYPE_DISABLED
         }
-    }
-
-    override fun getItemCount(): Int {
-        return shopList.size
     }
 
     companion object{
