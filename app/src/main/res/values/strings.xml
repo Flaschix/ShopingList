@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">ShopList</string>
     <string name="add_shop_item">Add new Item</string>
+    <string name="hint_name">Name:</string>
+    <string name="btnSave">Save</string>
+
 </resources>
