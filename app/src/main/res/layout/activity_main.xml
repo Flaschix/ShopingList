@@ -29,5 +29,6 @@
         android:focusable="true"
         app:layout_constraintBottom_toBottomOf="@+id/rvShopList"
         app:layout_constraintEnd_toEndOf="@+id/rvShopList"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        tools:ignore="ImageContrastCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

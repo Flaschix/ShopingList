@@ -3,5 +3,6 @@
     <string name="add_shop_item">Add new Item</string>
     <string name="hint_name">Name:</string>
     <string name="btnSave">Save</string>
+    <string name="error">Input Error</string>
 
 </resources>

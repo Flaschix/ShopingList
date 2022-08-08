@@ -1,27 +1,32 @@
 package com.example.shoplist.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
-import com.example.shoplist.domain.ShopItem
+import com.example.shoplist.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModelV
     private lateinit var shopListAdapter: ShopListAdapter
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setUpRecycleView()
 
         viewModel = ViewModelProvider(this).get(MainViewModelV::class.java)
         viewModel.shopList.observe(this){
             shopListAdapter.submitList(it)
+        }
+
+        binding.flaAddItem.setOnClickListener{
+            val intent = ShopItemActivity.newIntentAddShopItem(this)
+            startActivity(intent)
         }
     }
 
@@ -61,7 +66,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpClickListener() {
         shopListAdapter.onShopItemClickListener = {
-            Log.d("CheckBag", it.toString())
+            val intent = ShopItemActivity.newIntentEditShopItem(this, it.id)
+            startActivity(intent)
         }
     }
 
