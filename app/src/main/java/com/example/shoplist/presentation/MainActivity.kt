@@ -1,6 +1,7 @@
 package com.example.shoplist.presentation
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
@@ -10,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
 import com.example.shoplist.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
     private lateinit var viewModel: MainViewModelV
     private lateinit var shopListAdapter: ShopListAdapter
     private lateinit var binding: ActivityMainBinding
@@ -36,8 +37,10 @@ class MainActivity : AppCompatActivity() {
             }else{
                 launchFragment(ShopItemFragment.newInstanceAddItem())
             }
-
         }
+    }
+    override fun onEditingFinish() {
+        supportFragmentManager.popBackStack()
     }
 
     private fun setUpRecycleView(){

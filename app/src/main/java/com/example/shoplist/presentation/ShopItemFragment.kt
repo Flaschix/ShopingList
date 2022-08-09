@@ -1,5 +1,6 @@
 package com.example.shoplist.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,6 +17,12 @@ import com.google.android.material.textfield.TextInputLayout
 
 class ShopItemFragment: Fragment() {
 
+    interface OnEditingFinishedListener{
+        fun onEditingFinish()
+    }
+
+    private lateinit var onEditingFinishedListener: OnEditingFinishedListener
+
     private lateinit var btnSave: Button
     private lateinit var ietName: EditText
     private lateinit var ietCount: EditText
@@ -29,6 +36,13 @@ class ShopItemFragment: Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseParam()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if(context is OnEditingFinishedListener){
+            onEditingFinishedListener = context
+        } else throw RuntimeException("Activity must implement OnEditingFinishedListener")
     }
 
     override fun onCreateView(
@@ -71,7 +85,7 @@ class ShopItemFragment: Fragment() {
         }
 
         viewModel.closeActivity.observe(viewLifecycleOwner) {
-            activity?.onBackPressed()
+            onEditingFinishedListener.onEditingFinish()
         }
     }
 //

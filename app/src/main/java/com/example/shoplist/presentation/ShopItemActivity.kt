@@ -5,13 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.shoplist.R
 import com.example.shoplist.databinding.ActivityShopItemBinding
 import com.example.shoplist.domain.ShopItem
 
-class ShopItemActivity : AppCompatActivity() {
+class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
 
 
     private var screenMode = MODE_UNKNOWN
@@ -70,5 +71,9 @@ class ShopItemActivity : AppCompatActivity() {
             if(!intent.hasExtra(EXTRA_SHOP_ITEM_ID)) throw RuntimeException("Intent don't have shop_item_id")
             shopItemId = intent.getIntExtra(EXTRA_SHOP_ITEM_ID, ShopItem.UNDEFINED_ID)
         }
+    }
+
+    override fun onEditingFinish() {
+        finish()
     }
 }
