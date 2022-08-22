@@ -1,17 +1,20 @@
 package com.example.shoplist.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
 import com.example.shoplist.data.ShopListRepositoryImpl
 import com.example.shoplist.domain.AddShopItemUseCase
 import com.example.shoplist.domain.EditShopItemUseCase
 import com.example.shoplist.domain.GetShopItemUseCase
 import com.example.shoplist.domain.ShopItem
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class ShopItemViewModel: ViewModel() {
-    private val repository = ShopListRepositoryImpl
+class ShopItemViewModel(application: Application): AndroidViewModel(application) {
+    private val repository = ShopListRepositoryImpl(application)
 
     private val getShopItemUseCase = GetShopItemUseCase(repository)
     private val addShopItemUseCase = AddShopItemUseCase(repository)
@@ -33,9 +36,12 @@ class ShopItemViewModel: ViewModel() {
     val shopItem: LiveData<ShopItem>
         get() = _shopItem
 
+
     fun getShopItem(itemId: Int){
-        val shopItem = getShopItemUseCase.getShopItem(itemId)
-        _shopItem.value = shopItem
+        viewModelScope.launch {
+            val shopItem = getShopItemUseCase.getShopItem(itemId)
+            _shopItem.postValue(shopItem)
+        }
     }
 
     fun addShopItem(name: String?, count: String?){
@@ -43,8 +49,10 @@ class ShopItemViewModel: ViewModel() {
         val itemCount = parseCount(count)
         val fieldsValid = validInput(itemName, itemCount)
         if(fieldsValid) {
-            addShopItemUseCase.addShopItem(ShopItem(name = itemName, count = itemCount))
-            finishWork()
+            viewModelScope.launch {
+                addShopItemUseCase.addShopItem(ShopItem(name = itemName, count = itemCount))
+                finishWork()
+            }
         }
 
     }
@@ -55,9 +63,11 @@ class ShopItemViewModel: ViewModel() {
         val fieldsValid = validInput(itemName, itemCount)
         if(fieldsValid) {
             _shopItem.value?.let {
-                val item = it.copy(name = itemName, count = itemCount)
-                editShopItemUseCase.editShopItem(item)
-                finishWork()
+                viewModelScope.launch {
+                    val item = it.copy(name = itemName, count = itemCount)
+                    editShopItemUseCase.editShopItem(item)
+                    finishWork()
+                }
             }
         }
     }
@@ -93,7 +103,8 @@ class ShopItemViewModel: ViewModel() {
     }
 
     private fun finishWork() {
-        _closeActivity.value = Unit
+        _closeActivity.postValue(Unit)
     }
+
 
 }
